@@ -8,7 +8,7 @@
 	import Icon from '@iconify/svelte';
 
 	const LETTER_COUNT = 9;
-	const TIMER_DURATION = 40;
+	const TIMER_DURATION = 45;
 
 	let timer: Timer;
 	let audio: HTMLAudioElement;
