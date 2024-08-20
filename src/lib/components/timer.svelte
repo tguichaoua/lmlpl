@@ -3,6 +3,7 @@
 
 	const dispatch = createEventDispatcher<{
 		timeout: undefined;
+		change: boolean;
 	}>();
 
 	export let duration: number;
@@ -17,11 +18,13 @@
 				dispatch('timeout');
 			}
 		}, 1000);
+		dispatch('change', true);
 	}
 
 	export function pause() {
 		clearInterval(interval);
 		interval = undefined;
+		dispatch('change', false);
 	}
 
 	export function reset() {
