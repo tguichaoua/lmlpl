@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { LetterBag, type Letter } from '$lib/letter';
+	import timeout_sound from '$lib/assets/timeout.mp3';
+	import { PATHS as LETTER_SOUNDS_URL } from '$lib/assets/letters';
 
 	import Timer from '$lib/components/timer.svelte';
 	import LetterTile from '$lib/components/letterTile.svelte';
@@ -50,12 +52,12 @@
 		letters[current_letter] = l;
 		current_letter += 1;
 
-		audio.src = `/letters/${l}.mp3`;
+		audio.src = LETTER_SOUNDS_URL[l];
 		audio.play();
 	}
 
 	function on_timeout() {
-		audio.src = `/timeout.mp3`;
+		audio.src = timeout_sound;
 		audio.play();
 		timer_is_finished = true;
 	}
