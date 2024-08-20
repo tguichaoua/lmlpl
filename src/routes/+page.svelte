@@ -8,6 +8,7 @@
 	import Icon from '@iconify/svelte';
 
 	const LETTER_COUNT = 9;
+	const TIMER_DURATION = 40;
 
 	let timer: Timer;
 	let audio: HTMLAudioElement;
@@ -121,7 +122,7 @@
 		</div>
 		<div class="w-fit text-4xl">
 			<Timer
-				duration={2}
+				duration={TIMER_DURATION}
 				bind:this={timer}
 				on:change={(e) => (timer_is_running = e.detail)}
 				on:timeout={on_timeout}
