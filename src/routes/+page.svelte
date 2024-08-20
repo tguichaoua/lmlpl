@@ -91,17 +91,17 @@
 			<div class="select-none border border-black px-2 font-mono text-2xl font-bold">
 				<pre>{selected_text}</pre>
 			</div>
-			<div class="relative left-5 w-0">
-				<div class="flex w-fit flex-row gap-2">
+			<div class="relative left-4 w-0">
+				<div class="flex w-fit flex-row gap-1">
 					<button
 						class="aspect-square w-7"
 						on:click={() => {
 							selected_letter_indices.splice(-1, 1);
 							selected_letter_indices = selected_letter_indices;
-						}}><Icon icon="weui:back-filled" /></button
+						}}><Icon class="m-auto" icon="weui:back-filled" /></button
 					>
 					<button class="aspect-square w-7" on:click={() => (selected_letter_indices = [])}
-						><Icon icon="material-symbols:close" /></button
+						><Icon class="m-auto" icon="material-symbols:close" /></button
 					>
 				</div>
 			</div>
