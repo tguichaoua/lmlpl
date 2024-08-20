@@ -5,6 +5,8 @@
 	import LetterTile from '$lib/components/letterTile.svelte';
 	import Button from '$lib/components/button.svelte';
 
+	const LETTER_COUNT = 9;
+
 	let timer: Timer;
 	let timeout_audio: HTMLAudioElement;
 
@@ -19,17 +21,52 @@
 
 	let timer_is_running = false;
 	let timer_is_finished = false;
-	let letters: (Letter | '')[] = new Array(9).fill('');
+	let letters: (Letter | '')[] = new Array(LETTER_COUNT).fill('');
 	let current_letter = 0;
+
+	let selected_letter_indices: number[] = [];
+
+	function generate_selected_text(selected_letter_indices: number[]) {
+		let text = selected_letter_indices.reduce((acc, selected_index) => {
+			const l = letters[selected_index];
+			return (acc += l);
+		}, '');
+
+		if (text.length < LETTER_COUNT) {
+			text = text + ' '.repeat(LETTER_COUNT - text.length);
+		}
+
+		return text;
+	}
+
+	$: selected_text = generate_selected_text(selected_letter_indices);
 
 	function push_letter(l: Letter) {
 		letters[current_letter] = l;
 		current_letter += 1;
 	}
 
-	function onTimeout() {
+	function on_timeout() {
 		timeout_audio.play();
 		timer_is_finished = true;
+	}
+
+	function on_letter_tile_click(index: number) {
+		if (phase === 'drawing' || phase === 'running') return;
+
+		const letterIndex = selected_letter_indices.indexOf(index);
+
+		if (letterIndex === -1) {
+			selected_letter_indices.push(index);
+		} else {
+			selected_letter_indices.splice(letterIndex, 1);
+		}
+		selected_letter_indices = selected_letter_indices;
+	}
+
+	function start() {
+		timer.start();
+		selected_letter_indices = [];
 	}
 
 	function reset() {
@@ -42,14 +79,38 @@
 		timer_is_running = false;
 		letters = letters.fill('');
 		current_letter = 0;
+		selected_letter_indices = [];
 	}
 </script>
 
 <div class="flex h-dvh items-center justify-center">
 	<main class="flex flex-col items-center">
+		<div class="mb-3 flex flex-row items-center justify-center">
+			<div class="select-none border border-black px-2 font-mono text-2xl font-bold">
+				<pre>{selected_text}</pre>
+			</div>
+			<div class="relative left-5 w-0">
+				<div class="flex w-fit flex-row gap-2">
+					<button
+						class="aspect-square w-7"
+						on:click={() => {
+							selected_letter_indices.splice(-1, 1);
+							selected_letter_indices = selected_letter_indices;
+						}}>{'<'}</button
+					>
+					<button class="aspect-square w-7" on:click={() => (selected_letter_indices = [])}
+						>X</button
+					>
+				</div>
+			</div>
+		</div>
 		<div class="flex flex-row justify-center gap-2">
-			{#each letters as letter}
-				<LetterTile {letter} />
+			{#each letters as letter, i}
+				<LetterTile
+					{letter}
+					selected={selected_letter_indices.includes(i)}
+					on:click={() => on_letter_tile_click(i)}
+				/>
 			{/each}
 		</div>
 		<div class="mt-5 w-fit text-4xl">
@@ -57,7 +118,7 @@
 				duration={40}
 				bind:this={timer}
 				on:change={(e) => (timer_is_running = e.detail)}
-				on:timeout={onTimeout}
+				on:timeout={on_timeout}
 				show
 			/>
 		</div>
@@ -72,9 +133,7 @@
 					>
 				</div>
 			{:else}
-				<Button theme="blue" disabled={phase !== 'wait'} on:click={() => timer.start()}
-					>Démarrer</Button
-				>
+				<Button theme="blue" disabled={phase !== 'wait'} on:click={start}>Démarrer</Button>
 			{/if}
 
 			<Button theme="red" outlined on:click={reset}>Reset</Button>
