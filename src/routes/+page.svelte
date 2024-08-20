@@ -86,8 +86,8 @@
 </script>
 
 <div class="flex h-dvh items-center justify-center">
-	<main class="flex flex-col items-center">
-		<div class="mb-3 flex flex-row items-center justify-center">
+	<main class="flex flex-col items-center gap-3">
+		<div class="flex flex-row items-center justify-center">
 			<div class="select-none border border-black px-2 font-mono text-2xl font-bold">
 				<pre>{selected_text}</pre>
 			</div>
@@ -115,7 +115,7 @@
 				/>
 			{/each}
 		</div>
-		<div class="mt-5 w-fit text-4xl">
+		<div class="w-fit text-4xl">
 			<Timer
 				duration={40}
 				bind:this={timer}
@@ -124,7 +124,7 @@
 				show
 			/>
 		</div>
-		<div class="mt-5 flex w-full flex-col gap-2 text-2xl">
+		<div class="flex w-full flex-col gap-2 text-2xl">
 			{#if phase === 'drawing'}
 				<div class="strech flex w-full flex-row gap-2">
 					<Button theme="yellow" class="w-full" on:click={() => push_letter(random_vowel())}
