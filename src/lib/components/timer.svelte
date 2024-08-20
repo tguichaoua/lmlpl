@@ -41,5 +41,5 @@
 </script>
 
 {#if show}
-	<span>{current}</span>
+	<span role="timer">{current}</span>
 {/if}
