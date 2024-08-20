@@ -5,6 +5,8 @@
 	import LetterTile from '$lib/components/letterTile.svelte';
 	import Button from '$lib/components/button.svelte';
 
+	import Icon from '@iconify/svelte';
+
 	const LETTER_COUNT = 9;
 
 	let timer: Timer;
@@ -96,10 +98,10 @@
 						on:click={() => {
 							selected_letter_indices.splice(-1, 1);
 							selected_letter_indices = selected_letter_indices;
-						}}>{'<'}</button
+						}}><Icon icon="weui:back-filled" /></button
 					>
 					<button class="aspect-square w-7" on:click={() => (selected_letter_indices = [])}
-						>X</button
+						><Icon icon="material-symbols:close" /></button
 					>
 				</div>
 			</div>
