@@ -27,48 +27,70 @@ export type Letter = Consonant | Vowel;
 export type ConsonantMap = Record<Consonant, number>;
 export type VowelMap = Record<Vowel, number>;
 
-/**
- * A map of consonants with their associated weight of being chosen.
- */
-export const CONSONANTS: Readonly<ConsonantMap> = {
-	B: 1,
-	C: 1,
-	D: 1,
-	F: 1,
-	G: 1,
-	H: 1,
-	J: 1,
-	K: 1,
-	L: 1,
-	M: 1,
-	N: 1,
-	P: 1,
-	Q: 1,
-	R: 1,
-	S: 1,
-	T: 1,
-	V: 1,
-	W: 1,
-	X: 1,
-	Z: 1
-};
+export class LetterBag {
+	constructor(
+		private readonly consonants: ConsonantMap,
+		private readonly vowel: VowelMap
+	) {}
 
-/**
- * A map of vowel with their associated weight of being chosen.
- */
-export const VOWELS: Readonly<VowelMap> = {
-	A: 1,
-	E: 1,
-	I: 1,
-	O: 1,
-	U: 1,
-	Y: 1
-};
+	/**
+	 * Creates a new bag of letter with a repartition for the french language.
+	 * @returns A letter bag with a letter repartition for the french language.
+	 */
+	static new_french() {
+		return new LetterBag(
+			{
+				B: 4,
+				C: 4,
+				D: 4,
+				F: 4,
+				G: 4,
+				H: 4,
+				J: 1,
+				K: 1,
+				L: 6,
+				M: 4,
+				N: 7,
+				P: 3,
+				Q: 1,
+				R: 7,
+				S: 7,
+				T: 6,
+				V: 2,
+				W: 1,
+				X: 1,
+				Z: 1
+			},
+			{
+				A: 8,
+				E: 13,
+				I: 6,
+				O: 6,
+				U: 6,
+				Y: 1
+			}
+		);
+	}
 
-export function random_consonant(): Consonant {
-	return getWeightedRandomItem(Object.entries(CONSONANTS), (x) => x[1])[0];
-}
+	/**
+	 * Pick and remove one consonant from the bag.
+	 * @returns A random consonant
+	 */
+	pick_consonant() {
+		const item = getWeightedRandomItem(Object.entries(this.consonants), (x) => x[1])[0];
+		this.consonants[item] -= 1;
 
-export function random_vowel(): Vowel {
-	return getWeightedRandomItem(Object.entries(VOWELS), (x) => x[1])[0];
+		return item;
+	}
+
+	/**
+	 * Pick and remove one vowel from the bag.
+	 * @returns A random vowel
+	 */
+	pick_vowel() {
+		const item = getWeightedRandomItem(Object.entries(this.vowel), (x) => x[1])[0];
+		this.vowel[item] -= 1;
+
+		return item;
+	}
 }
