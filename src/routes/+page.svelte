@@ -10,7 +10,7 @@
 	const LETTER_COUNT = 9;
 
 	let timer: Timer;
-	let timeout_audio: HTMLAudioElement;
+	let audio: HTMLAudioElement;
 
 	$: phase =
 		current_letter < letters.length
@@ -46,10 +46,14 @@
 	function push_letter(l: Letter) {
 		letters[current_letter] = l;
 		current_letter += 1;
+
+		audio.src = `/letters/${l}.mp3`;
+		audio.play();
 	}
 
 	function on_timeout() {
-		timeout_audio.play();
+		audio.src = `/timeout.mp3`;
+		audio.play();
 		timer_is_finished = true;
 	}
 
@@ -72,8 +76,8 @@
 	}
 
 	function reset() {
-		timeout_audio.pause();
-		timeout_audio.currentTime = 0;
+		audio.pause();
+		audio.currentTime = 0;
 
 		timer.reset();
 
@@ -117,7 +121,7 @@
 		</div>
 		<div class="w-fit text-4xl">
 			<Timer
-				duration={40}
+				duration={2}
 				bind:this={timer}
 				on:change={(e) => (timer_is_running = e.detail)}
 				on:timeout={on_timeout}
@@ -143,7 +147,4 @@
 	</main>
 </div>
 
-<audio
-	src="https://freesound.org/data/previews/536/536420_4921277-lq.mp3"
-	bind:this={timeout_audio}
-/>
+<audio bind:this={audio} />
